@@ -1,14 +1,36 @@
 import { Text, View, StyleSheet } from "react-native";
 import { Link } from 'expo-router'
 import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
+//Imports
+import ImageViewer from "@/components/ImageViewer";
+import Button from "@/components/Button";
 
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
 export default function Index() {
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result);
+    } else {
+      alert('you did not select any image')
+    }
+  }
+
   return (
     <View style={styles.container}>  
       <View style={styles.imageContainer}>
-        <Image source={PlaceholderImage} style={styles.image} />
+        <ImageViewer imgSource={PlaceholderImage} />
+      </View>
+      <View style={styles.footContainer}>
+        <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
+        <Button label="use this photo" />
       </View>
     </View>
   );
@@ -23,10 +45,10 @@ const styles = StyleSheet.create( {
   },
   imageContainer: {
     flex: 1,
+    paddingTop: 28,
   },
-  image: {
-    width:320,
-    height:440,
-    borderRadius: 18,
+  footContainer: {
+    flex: 1/3,
+    alignItems: 'center'
   }
 });
